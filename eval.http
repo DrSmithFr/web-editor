@@ -1,7 +1,0 @@
-### GET request to example server
-GET http://localhost:5050/eval
-Content-Type: text/plain
-
-return event.client_id
-
-###

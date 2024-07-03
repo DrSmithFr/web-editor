@@ -6,6 +6,9 @@
   --editor-line-height: 1.5;
   --editor-font-family: monospace;
 
+  --editor-min-width: 500px;
+  --editor-min-height: 200px;
+
   --editor-line-bar-width: 50px;
 
   --editor-background: #333;
@@ -65,8 +68,8 @@
 }
 
 .editor-wrapper {
-  min-width: 800px;
-  min-height: 600px;
+  min-width: var(--editor-min-width);
+  min-height: var(--editor-min-height);
 
   position: relative;
   overflow: hidden;
