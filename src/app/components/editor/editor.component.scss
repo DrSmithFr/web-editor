@@ -1,31 +1,62 @@
 :host {
   border: 5px solid #333;
   border-radius: 5px;
+
+  --editor-font-size: 16px;
+  --editor-line-height: 1.5;
+  --editor-font-family: monospace;
+
+  --editor-line-bar-width: 50px;
+
+  --editor-background: #333;
+  --editor-border: #888;
+  --editor-color: #fff;
+
+  --editor-selection-background: rgba(0, 192, 255, 0.5);
+  --editor-selection-color: #fff;
+
+  --editor-caret-color: #fff;
+  --editor-caret-shape: underscore;
+
+  --editor-scrollbar-color: #888888 rgba(17, 17, 17, 0.5);
+  --editor-scrollbar-width: thin;
 }
 
 .editor {
   display: flex;
   flex-direction: row;
 
-  background: #333;
+  background: var(--editor-background);
 }
 
 .editor-lines {
   position: absolute;
+  left: -3px;
 
-  width: 50px;
+  min-width: var(--editor-line-bar-width);
   height: 100%;
 
-  background: #333;
+  background: #222;
   color: #888888;
 
   z-index: 1;
+
+  margin-right: 2px;
+  border-right: 1px solid var(--editor-border);
+
+  border-radius: 5px;
 
   .editor-lines-li {
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
+
+    position: relative;
+    left: 1px;
+
+    background: #222;
+    border-right: 1px solid var(--editor-border);
   }
 }
 
@@ -36,15 +67,15 @@
   position: relative;
   overflow: hidden;
 
-  background: #333;
-  color: #fff;
+  background: var(--editor-background);
+  color: var(--editor-color);
 
   ::-moz-selection { /* Code for Firefox */
-    background: rgba(0, 192, 255, 0.5);
+    background: var(--editor-selection-background);
   }
 
   ::selection {
-    background: rgba(0, 192, 255, 0.5);
+    background: var(--editor-selection-background);
   }
 
   .editor-layer {
@@ -52,15 +83,15 @@
     position: absolute;
 
     top: 0;
-    left: 50px;
+    left: var(--editor-line-bar-width);
 
-    width: calc(100% - 50px);
+    width: calc(100% - var(--editor-line-bar-width));
     height: 100%;
   }
 }
 
 .spacing {
-  color: #888;
+  color: var(--editor-border);
 }
 
 .errors {
@@ -69,10 +100,10 @@
 
 code,
 .code{
-  font-family: monospace;
   unicode-bidi: isolate;
   white-space: pre;
-  font-size: 16px;
+  font-size: var(--editor-font-size);
+  font-family: var(--editor-font-family), monospace;
 }
 
 textarea {
@@ -85,9 +116,9 @@ textarea {
 
   color: transparent;
 
-  caret-color: #fff;
-  caret-shape: underscore;
+  caret-color: var(--editor-color);
+  caret-shape: var(--editor-caret-shape);
 
-  scrollbar-color: #888888 rgba(17, 17, 17, 0.5);
-  scrollbar-width: thin;
+  scrollbar-color: var(--editor-scrollbar-color);
+  scrollbar-width: var(--editor-scrollbar-width);
 }

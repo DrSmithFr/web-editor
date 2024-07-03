@@ -2,7 +2,7 @@
   <div class="editor-wrapper">
     <div
       class="editor-lines"
-      style="top: -{{scrollTop}}px;">
+      style="top: {{scrollTop}}px;">
       <div class="editor-lines-li">
         @for (line of getLinesNumber(code); track line) {
           <code>{{ line }}</code>
