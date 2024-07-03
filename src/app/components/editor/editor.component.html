@@ -1,0 +1,42 @@
+<div class="editor">
+  <div class="editor-wrapper">
+    <div
+      class="editor-lines"
+      style="top: -{{scrollTop}}px;">
+      <div class="editor-lines-li">
+        @for (line of getLinesNumber(code); track line) {
+          <code>{{ line }}</code>
+        }
+      </div>
+    </div>
+
+    <code
+      class="editor-layer code spacing"
+      [innerHTML]="code | showSpace"
+      style="top: {{scrollTop}}px; left: {{scrollLeft}}px;">
+    </code>
+
+    <code
+      class="editor-layer code highlight"
+      [innerHTML]="code | highlight: language"
+      style="top: {{scrollTop}}px; left: {{scrollLeft}}px;">
+    </code>
+
+    <code
+      class="editor-layer code errors"
+      [innerHTML]="code"
+      style="top: {{scrollTop}}px; left: {{scrollLeft}}px;">
+    </code>
+
+    <textarea
+      #editor
+      class="editor-layer code editor"
+      [(ngModel)]="code"
+      (ngModelChange)="onCodeChange()"
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      (scroll)="onEditorScrollUpdate()">
+  </textarea>
+  </div>
+
+</div>
+

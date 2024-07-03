@@ -1,0 +1,90 @@
+:host {
+  border: 5px solid #333;
+  border-radius: 5px;
+}
+
+.editor {
+  display: flex;
+  flex-direction: row;
+
+  background: #333;
+}
+
+.editor-lines {
+  position: absolute;
+
+  width: 50px;
+  height: 100%;
+
+  background: #333;
+  color: #888888;
+
+  z-index: 1;
+
+  .editor-lines-li {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+.editor-wrapper {
+  min-width: 800px;
+  min-height: 600px;
+
+  position: relative;
+  overflow: hidden;
+
+  background: #333;
+  color: #fff;
+
+  ::-moz-selection { /* Code for Firefox */
+    background: rgba(0, 192, 255, 0.5);
+  }
+
+  ::selection {
+    background: rgba(0, 192, 255, 0.5);
+  }
+
+  .editor-layer {
+    background: transparent;
+    position: absolute;
+
+    top: 0;
+    left: 50px;
+
+    width: calc(100% - 50px);
+    height: 100%;
+  }
+}
+
+.spacing {
+  color: #888;
+}
+
+.errors {
+  color: transparent;
+}
+
+code,
+.code{
+  font-family: monospace;
+  unicode-bidi: isolate;
+  white-space: pre;
+  font-size: 16px;
+}
+
+textarea {
+  padding: 0;
+  margin: 0;
+
+  border: none;
+  outline: none;
+  resize: none;
+
+  color: transparent;
+
+  caret-color: #fff;
+  caret-shape: underscore;
+}
