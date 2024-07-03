@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { HighlightPipe } from '../../pipes/highlight.pipe';
 import { SpaceShowPipe } from '../../pipes/space-show.pipe';
 import { CommonModule } from '@angular/common';
+import { showMaxLength } from '../../pipes/show-max-lenght.pipe';
 
 @Component(
   {
@@ -11,7 +12,8 @@ import { CommonModule } from '@angular/common';
       CommonModule,
       FormsModule,
       HighlightPipe,
-      SpaceShowPipe
+      SpaceShowPipe,
+      showMaxLength
     ],
     standalone: true,
     templateUrl: './editor.component.html',
