@@ -42,6 +42,7 @@ export class EditorComponent implements AfterViewInit, ControlValueAccessor {
   }
 
   protected _code = '';
+  protected _code_history: string[] = [];
 
   selectionStart = 0;
   selectionEnd   = 0;
@@ -90,19 +91,36 @@ export class EditorComponent implements AfterViewInit, ControlValueAccessor {
   }
 
   onKeyDown(e: KeyboardEvent) {
+
+    if (e.key == 'z' && e.ctrlKey) {
+      e.preventDefault();
+
+      if (this._code_history.length > 1) {
+        this._code_history.pop();
+        this._code = this._code_history[this._code_history.length - 1];
+        this.onChangeCallback(this._code);
+      }
+    }
+
     if (e.key == 'Tab') {
       e.preventDefault();
-      var start = this.selectionStart;
-      var end   = this.selectionEnd;
 
-      // set textarea value to: text before caret + tab + text after caret
-      this._code = this._code.substring(0, start) + '\t' + this._code.substring(end);
-
-      // put caret at right position again
       const editor = this.editor.nativeElement;
-      const newCaretPosition = start + 1;
+      const startSelection = editor.selectionStart;
+
+      this._code_history.push(editor.value);
+
+      editor.setRangeText(
+        "\t",
+        startSelection,
+        editor.selectionEnd,
+        "end"
+      );
+
+      const newCaretPosition = startSelection + 1;
 
       setTimeout(() => {
+        this._code = editor.value;
         editor.setSelectionRange(newCaretPosition, newCaretPosition);
         this.onEditorScrollUpdate();
       });
@@ -120,6 +138,11 @@ export class EditorComponent implements AfterViewInit, ControlValueAccessor {
     e: Event
   ) {
     const editor        = this.editor.nativeElement;
+
+    if (this.selectionStart === editor.selectionStart && this.selectionEnd === editor.selectionEnd) {
+      return;
+    }
+
     this.selectionStart = editor.selectionStart || 0;
     this.selectionEnd   = editor.selectionEnd || 0;
 
@@ -151,6 +174,7 @@ export class EditorComponent implements AfterViewInit, ControlValueAccessor {
     }
 
     this._code = obj;
+    this._code_history.push(obj);
     this.onEditorScrollUpdate();
   }
 
