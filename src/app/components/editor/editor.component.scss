@@ -20,6 +20,8 @@
   --editor-scrollbar-color: #888888 rgba(17, 17, 17, 0.5);
   --editor-scrollbar-width: thin;
 
+  --comment-color: #72a2b8;
+
   // fix editor width
   width: calc(100% - var(--editor-border-width) * 2);
 
@@ -111,6 +113,7 @@
 
 code,
 .code{
+  tab-size: 4;
   unicode-bidi: isolate;
   white-space: pre;
   font-size: var(--editor-font-size);
@@ -138,3 +141,18 @@ textarea {
     background: rgba(50, 50, 50, 0.8) !important;
   }
 }
+
+::placeholder {
+  color: var(--comment-color);
+  opacity: 1; /* Firefox */
+}
+
+::-ms-input-placeholder { /* Edge 12 -18 */
+  color: var(--comment-color);
+}
+
+.hljs-comment {
+  color: var(--comment-color);
+}
+
+

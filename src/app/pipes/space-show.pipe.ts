@@ -7,6 +7,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class SpaceShowPipe implements PipeTransform {
 
   transform(code: string): unknown {
-    return code.replace(/ /g, '·');
+    return code.replace(/ /g, '·').replace(/\t/g, " -→ ");
   }
 }

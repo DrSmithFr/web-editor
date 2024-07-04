@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Input, ViewChild } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { HighlightPipe } from '../../pipes/highlight.pipe';
 import { SpaceShowPipe } from '../../pipes/space-show.pipe';
@@ -30,51 +30,107 @@ import { showMaxLength } from '../../pipes/show-max-lenght.pipe';
 export class EditorComponent implements AfterViewInit, ControlValueAccessor {
   @ViewChild('editor') editor!: ElementRef<HTMLDivElement>;
 
-  disabled = false;
+  @Input() language    = 'python';
+  @Input() disabled    = false;
+  @Input() placeholder = '';
 
-  code = '';
-  language = 'python';
+  @Input() set code(code: string) {
+    this._code = code;
+  }
 
-  scrollTop = 0;
-  scrollLeft = 0;
+  protected _code = '';
 
-  width: number = 0;
+  selectionStart = 0;
+  selectionEnd   = 0;
+
+  scrollTop  = 0;
+  scrollLeft = 50;
+
+  width: number  = 0;
   height: number = 0;
 
   ngAfterViewInit() {
-    this.editor.nativeElement.focus();
-    this.onEditorScrollUpdate();
+    const editor = this.editor.nativeElement;
+
+    if (!editor) {
+      console.error('Editor not found');
+      return;
+    }
+
+    editor.focus();
+
+    editor.addEventListener('keydown', this.onKeyDown.bind(this));
+    editor.addEventListener('scroll', this.onEditorScrollUpdate.bind(this));
+
+    // follow caret position and selection
+    editor.addEventListener('keypress', this.onCaretsChange.bind(this)); // Every character written
+    editor.addEventListener('mousedown', this.onCaretsChange.bind(this)); // Click down
+    editor.addEventListener('touchstart', this.onCaretsChange.bind(this)); // Mobile
+    editor.addEventListener('input', this.onCaretsChange.bind(this)); // Other input events
+    editor.addEventListener('paste', this.onCaretsChange.bind(this)); // Clipboard actions
+    editor.addEventListener('cut', this.onCaretsChange.bind(this));
+    editor.addEventListener('mousemove', this.onCaretsChange.bind(this)); // Selection, dragging text
+    editor.addEventListener('select', this.onCaretsChange.bind(this)); // Some browsers support this event
+    editor.addEventListener('selectstart', this.onCaretsChange.bind(this)); // Some browsers support this event
+    editor.addEventListener('selectionchange', this.onCaretsChange.bind(this));
   }
 
   onEditorScrollUpdate() {
     const scrollTop = this.editor.nativeElement.scrollTop;
-    let scrollLeft = this.editor.nativeElement.scrollLeft;
+    let scrollLeft  = this.editor.nativeElement.scrollLeft;
 
     console.log('scrollLeft', scrollLeft);
 
     const scrollLeftOffset = 50;
-    scrollLeft -= scrollLeftOffset;
+    scrollLeft += scrollLeftOffset;
 
     setTimeout(() => {
-      this.scrollTop = -scrollTop;
+      this.scrollTop  = -scrollTop;
       this.scrollLeft = -scrollLeft;
     });
   }
 
+  onKeyDown(e: KeyboardEvent) {
+    if (e.key == 'Tab') {
+      e.preventDefault();
+      var start = this.selectionStart;
+      var end   = this.selectionEnd;
+
+      // set textarea value to: text before caret + tab + text after caret
+      this._code = this._code.substring(0, start) + '\t' + this._code.substring(end);
+
+      // put caret at right position again
+      this.selectionStart = this.selectionEnd = start + 1;
+    }
+  }
+
+  onCaretsChange(
+    e: Event
+  ) {
+    const editor = this.editor.nativeElement;
+
+    if ( editor instanceof HTMLTextAreaElement ) {
+      this.selectionStart = editor.selectionStart || 0;
+      this.selectionEnd   = editor.selectionEnd || 0;
+
+      console.log('selectionStart', this.selectionStart);
+      console.log('selectionEnd', this.selectionEnd);
+    }
+  }
+
   getLinesNumber(code: string): number[] {
     const nbLines = code.split('\n').length;
-    return Array.from({ length: nbLines }, (_, i) => i + 1);
+    return Array.from({length: nbLines}, (_, i) => i + 1);
   }
 
   // ControlValueAccessor implementation
 
-
-
   //Placeholders for the callbacks which are later providesd
   //by the Control Value Accessor
   // noop stands for No Operation
-  noop = () => {};
-  private onTouchedCallback: () => void = this.noop;
+  noop                                       = () => {
+  };
+  private onTouchedCallback: () => void      = this.noop;
   private onChangeCallback: (_: any) => void = this.noop;
 
   writeValue(obj: string): void {
@@ -82,19 +138,22 @@ export class EditorComponent implements AfterViewInit, ControlValueAccessor {
       return;
     }
 
-    if (obj === this.code) {
+    if (obj === this._code) {
       return;
     }
 
-    this.code = obj;
+    this._code = obj;
     this.onEditorScrollUpdate();
   }
+
   registerOnChange(fn: any): void {
     this.onChangeCallback = fn;
   }
+
   registerOnTouched(fn: any): void {
     this.onTouchedCallback = fn;
   }
+
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }

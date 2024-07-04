@@ -4,7 +4,7 @@
       class="editor-lines"
       style="top: {{scrollTop}}px;">
       <div class="editor-lines-li">
-        @for (line of getLinesNumber(code); track line) {
+        @for (line of getLinesNumber(_code); track line) {
           <code>{{ line }}</code>
         }
       </div>
@@ -12,33 +12,34 @@
 
     <code
       class="editor-layer code spacing"
-      [innerHTML]="code | showMaxLength: 80"
+      [innerHTML]="_code | showMaxLength: 80"
       style="top: {{scrollTop}}px; left: {{scrollLeft}}px; width: {{width}}px; height: {{height}}px;">
     </code>
 
     <code
       class="editor-layer code spacing"
-      [innerHTML]="code | showSpace"
+      [innerHTML]="_code | showSpace"
       style="top: {{scrollTop}}px; left: {{scrollLeft}}px;">
     </code>
 
     <code
       class="editor-layer code highlight"
-      [innerHTML]="code | highlight: language"
+      [innerHTML]="_code | highlight: language"
       style="top: {{scrollTop}}px; left: {{scrollLeft}}px;">
     </code>
 
     <code
       class="editor-layer code errors"
-      [innerHTML]="code"
+      [innerHTML]="_code"
       style="top: {{scrollTop}}px; left: {{scrollLeft}}px;">
     </code>
 
     <textarea
       #editor
       class="editor-layer code editor"
+      [placeholder]="placeholder"
       [disabled]="disabled"
-      [(ngModel)]="code"
+      [(ngModel)]="_code"
       autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
       (scroll)="onEditorScrollUpdate()">
   </textarea>
