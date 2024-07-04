@@ -1,5 +1,9 @@
 <div class="app-container">
   <app-editor
-    [disabled]="false"
-    placeholder="# Return a boolean value ta validate the event"></app-editor>
+    language="python"
+    width="300px"
+    height="100px"
+    placeholder="# Return a boolean value ta validate the event"
+    [(ngModel)]="code">
+  </app-editor>
 </div>

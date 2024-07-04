@@ -17,7 +17,7 @@ describe('AppComponent', () => {
   it(`should have the 'web-editor' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('web-editor');
+    expect(app.code).toEqual('web-editor');
   });
 
   it('should render title', () => {

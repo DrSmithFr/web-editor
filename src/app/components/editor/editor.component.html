@@ -1,4 +1,4 @@
-<div class="editor">
+<div class="editor" style="width: {{width}}; height: {{height}};">
   <div class="editor-wrapper">
     <div
       class="editor-lines"
@@ -36,7 +36,7 @@
 
     <textarea
       #editor
-      class="editor-layer code editor"
+      class="editor-layer code"
       [placeholder]="placeholder"
       [disabled]="disabled"
       [(ngModel)]="_code"

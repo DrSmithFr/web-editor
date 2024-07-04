@@ -28,11 +28,14 @@ import { showMaxLength } from '../../pipes/show-max-lenght.pipe';
   }
 )
 export class EditorComponent implements AfterViewInit, ControlValueAccessor {
-  @ViewChild('editor') editor!: ElementRef<HTMLDivElement>;
+  @ViewChild('editor') editor!: ElementRef<HTMLTextAreaElement>;
 
   @Input() language    = 'python';
   @Input() disabled    = false;
   @Input() placeholder = '';
+
+  @Input() width  = '100%';
+  @Input() height = '100%';
 
   @Input() set code(code: string) {
     this._code = code;
@@ -46,9 +49,6 @@ export class EditorComponent implements AfterViewInit, ControlValueAccessor {
   scrollTop  = 0;
   scrollLeft = 50;
 
-  width: number  = 0;
-  height: number = 0;
-
   ngAfterViewInit() {
     const editor = this.editor.nativeElement;
 
@@ -60,6 +60,7 @@ export class EditorComponent implements AfterViewInit, ControlValueAccessor {
     editor.focus();
 
     editor.addEventListener('keydown', this.onKeyDown.bind(this));
+    editor.addEventListener('keyup', this.onKeyUp.bind(this));
     editor.addEventListener('scroll', this.onEditorScrollUpdate.bind(this));
 
     // follow caret position and selection
@@ -79,10 +80,8 @@ export class EditorComponent implements AfterViewInit, ControlValueAccessor {
     const scrollTop = this.editor.nativeElement.scrollTop;
     let scrollLeft  = this.editor.nativeElement.scrollLeft;
 
-    console.log('scrollLeft', scrollLeft);
-
     const scrollLeftOffset = 50;
-    scrollLeft += scrollLeftOffset;
+    scrollLeft -= scrollLeftOffset;
 
     setTimeout(() => {
       this.scrollTop  = -scrollTop;
@@ -100,22 +99,31 @@ export class EditorComponent implements AfterViewInit, ControlValueAccessor {
       this._code = this._code.substring(0, start) + '\t' + this._code.substring(end);
 
       // put caret at right position again
-      this.selectionStart = this.selectionEnd = start + 1;
+      const editor = this.editor.nativeElement;
+      const newCaretPosition = start + 1;
+
+      setTimeout(() => {
+        editor.setSelectionRange(newCaretPosition, newCaretPosition);
+        this.onEditorScrollUpdate();
+      });
+    }
+  }
+
+  onKeyUp(e: KeyboardEvent) {
+    if (['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'].includes(e.key)) {
+      e.preventDefault();
+      this.onCaretsChange(e)
     }
   }
 
   onCaretsChange(
     e: Event
   ) {
-    const editor = this.editor.nativeElement;
+    const editor        = this.editor.nativeElement;
+    this.selectionStart = editor.selectionStart || 0;
+    this.selectionEnd   = editor.selectionEnd || 0;
 
-    if ( editor instanceof HTMLTextAreaElement ) {
-      this.selectionStart = editor.selectionStart || 0;
-      this.selectionEnd   = editor.selectionEnd || 0;
-
-      console.log('selectionStart', this.selectionStart);
-      console.log('selectionEnd', this.selectionEnd);
-    }
+    console.log(`{ ${this.selectionStart} : ${this.selectionEnd} }`)
   }
 
   getLinesNumber(code: string): number[] {
