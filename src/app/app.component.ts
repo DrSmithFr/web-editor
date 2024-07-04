@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { EditorComponent } from './components/editor/editor.component';
 import hljs from 'highlight.js/lib/core';
 import python from 'highlight.js/lib/languages/python';
+import { FormsModule } from '@angular/forms';
 
 @Component(
   {
@@ -10,7 +11,8 @@ import python from 'highlight.js/lib/languages/python';
     standalone: true,
     imports: [
       RouterOutlet,
-      EditorComponent
+      EditorComponent,
+      FormsModule
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'

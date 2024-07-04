@@ -37,8 +37,8 @@
     <textarea
       #editor
       class="editor-layer code editor"
+      [disabled]="disabled"
       [(ngModel)]="code"
-      (ngModelChange)="onCodeChange()"
       autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
       (scroll)="onEditorScrollUpdate()">
   </textarea>

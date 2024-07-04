@@ -6,8 +6,11 @@
   --editor-line-height: 1.5;
   --editor-font-family: monospace;
 
-  --editor-min-width: 500px;
-  --editor-min-height: 200px;
+  //--editor-min-width: 500px;
+  //--editor-min-height: 200px;
+
+  --editor-min-width: 800px;
+  --editor-min-height: 500px;
 
   --editor-line-bar-width: 50px;
 
@@ -128,4 +131,9 @@ textarea {
 
   scrollbar-color: var(--editor-scrollbar-color);
   scrollbar-width: var(--editor-scrollbar-width);
+
+  &:disabled {
+    cursor: not-allowed;
+    background: rgba(50, 50, 50, 0.8) !important;
+  }
 }
