@@ -38,6 +38,9 @@ export class EditorComponent implements AfterViewInit, ControlValueAccessor {
   scrollTop = 0;
   scrollLeft = 0;
 
+  width: number = 0;
+  height: number = 0;
+
   ngAfterViewInit() {
     this.editor.nativeElement.focus();
     this.onEditorScrollUpdate();

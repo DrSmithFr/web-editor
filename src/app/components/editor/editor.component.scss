@@ -1,18 +1,11 @@
 :host {
-  border: 5px solid #333;
-  border-radius: 5px;
-
   --editor-font-size: 16px;
   --editor-line-height: 1.5;
   --editor-font-family: monospace;
-
-  //--editor-min-width: 500px;
-  //--editor-min-height: 200px;
-
-  --editor-min-width: 800px;
-  --editor-min-height: 500px;
+  --editor-border-width: 5px;
 
   --editor-line-bar-width: 50px;
+  --editor-min-height: 200px;
 
   --editor-background: #333;
   --editor-border: #888;
@@ -26,11 +19,19 @@
 
   --editor-scrollbar-color: #888888 rgba(17, 17, 17, 0.5);
   --editor-scrollbar-width: thin;
+
+  // fix editor width
+  width: calc(100% - var(--editor-border-width) * 2);
+
+  border: 5px solid #333;
+  border-radius: var(--editor-border-width);
 }
 
 .editor {
   display: flex;
   flex-direction: row;
+
+  width: 100%;
 
   background: var(--editor-background);
 }
@@ -71,7 +72,7 @@
 }
 
 .editor-wrapper {
-  min-width: var(--editor-min-width);
+  width: 100%;
   min-height: var(--editor-min-height);
 
   position: relative;
